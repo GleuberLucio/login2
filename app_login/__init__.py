@@ -3,9 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from config.config import Config
 
 db = SQLAlchemy()
-app = Flask(__name__)
 
 def init_app():
+    app = Flask(__name__)
     app.config.from_object(Config)
     
     db.init_app(app)
@@ -18,4 +18,3 @@ def init_app():
     app.register_blueprint(routes.bp)
         
     return app
-    

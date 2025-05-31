@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .controllers import get_all_users, get_user_by_email, get_user_by_id, create_user, save_user, update_user, delete_user, hash_password, verify_password
-from app import db
+from app_login import db
 
 bp = Blueprint('main', __name__)
 
