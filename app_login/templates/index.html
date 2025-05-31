@@ -8,33 +8,33 @@
     <body>
         <h2>Registered Users</h2>
         <p>List of users who have registered:</p>
-        <a href="/register">
-            <button type="button">Register</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                            <a href="/update/{{ user.id }}">
-                                <button type="button">Update</button>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="/delete/{{ user.id }}">
-                                <button type="button">Delete</button>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </body>
-    </html>
+        <a href="/register"> </a>
+        <button type="button">Register</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a href="/update/{{ user.id }}">
+                            <button type="button">Update</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/delete/{{ user.id }}">
+                            <button type="button">Delete</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
