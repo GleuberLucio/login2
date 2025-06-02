@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from .controllers import get_all_users, get_user_by_email, get_user_by_id, create_user, save_user, update_user, delete_user, hash_password, verify_password
-from app_login import db
+from .controllers import get_all_users, get_user_by_email, get_user_by_id, create_user, save_user, update_user, delete_user, hash_password
 from flask_login import login_required
+from .auth_controllers import generate_token, send_password_reset_email
 
 bp = Blueprint('main', __name__)
 
@@ -74,5 +74,41 @@ def update(user_id):
     
     return render_template('update.html', user=user)
 
+@bp.route('/forgot', methods=['GET', 'POST'])
+def forgot():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = get_user_by_email(email)
+        
+        
+        if not user:
+            flash('Email not registered!', 'error')
+            return redirect(url_for('main.forgot'))
+        
+        token = generate_token(user.email)
+        message = send_password_reset_email(user.email, token)
+        flash('Password reset link sent to your email!', 'success')        
+        
+        # Here you would typically send a password reset email
+        flash('Password reset link sent to your email!', 'success')
+        return redirect(url_for('auth.login'))
     
-    
+    return render_template('forgot.html')
+
+@bp.route('/reset', methods=['GET'])
+def reset():
+    return render_template('reset_pass.html')
+
+@bp.route('/teste-email')
+def teste_email():
+    """Test route to send a test email."""
+    from flask_mail import Message
+    from app_login import mail
+    msg = Message(subject="Test Email", recipients=["exemplo@teste.com"])
+    msg.body = "This is a test email from Flask application."
+    try:
+        mail.send(msg)
+        flash('Test email sent successfully!', 'success')
+    except Exception as e:
+        flash(f'Failed to send test email: {e}', 'error')
+    return redirect(url_for('main.index'))
