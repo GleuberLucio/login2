@@ -5,10 +5,16 @@ from passlib.hash import pbkdf2_sha256 as hasher
 def get_all_users():
     return User.get_all_users()
 
-def get_user_by_id(user_id):
+def get_user_by_id(user_id) -> User:
+    """Retrieve a user by their ID."""
+    user_id = int(user_id)  # Ensure user_id is an integer
+    if user_id <= 0:
+        raise ValueError("User ID must be valid.")
     return User.get_by_id(user_id)
 
-def get_user_by_email(email):
+def get_user_by_email(email) -> User:
+    """Retrieve a user by their email."""
+    email = email.lower().strip()
     return User.get_by_email(email)
 
 def format_name(name):

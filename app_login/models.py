@@ -1,7 +1,8 @@
 from app_login import db
 from passlib.hash import pbkdf2_sha256 as hasher
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     """User model for the application."""
     
     id = db.Column(db.Integer, primary_key=True)

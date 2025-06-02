@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .controllers import get_all_users, get_user_by_email, get_user_by_id, create_user, save_user, update_user, delete_user, hash_password, verify_password
 from app_login import db
+from flask_login import login_required
 
 bp = Blueprint('main', __name__)
 
-@bp.route('/')
+@bp.route('/home', methods=['GET'])
+@login_required
 def index():
     users = get_all_users()
     if not users:
@@ -13,6 +15,7 @@ def index():
     return render_template('index.html', users=users)
 
 @bp.route('/register', methods=['GET', 'POST'])
+@login_required
 def register():
     if request.method == 'POST':
         name = request.form['name']
@@ -34,6 +37,7 @@ def register():
     return render_template('register.html')
 
 @bp.route('/delete/<int:user_id>', methods=['GET'])
+@login_required
 def delete(user_id):
     user = get_user_by_id(user_id)
     if not user:
@@ -44,6 +48,7 @@ def delete(user_id):
     return redirect(url_for('main.index'))
 
 @bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def update(user_id):
     user = get_user_by_id(user_id)
     if request.method == 'POST':
@@ -67,5 +72,7 @@ def update(user_id):
         flash('User updated successfully!', 'success')
         return redirect(url_for('main.index'))
     
-    return render_template('update.html', user=user)    
+    return render_template('update.html', user=user)
+
+    
     
