@@ -1,8 +1,7 @@
 from itsdangerous import URLSafeTimedSerializer
 from config.config import Config
-from flask_mail import Message
 from flask import url_for
-from app_login import mail
+from ..utils.email import send_password_reset_email
 from passlib.hash import pbkdf2_sha256 as hasher
 
 def generate_token(email):
@@ -20,21 +19,14 @@ def verify_token(token):
         print(f"Token verification failed: {e}")
         return None
     
-def send_password_reset_email(email, token):
+def send_password_reset_link(email, token):
     """Send a password reset email to the user."""
-    msg = Message(subject="Password Reset Request",
-                  sender=Config.MAIL_DEFAULT_SENDER,
-                  recipients=[email])
     reset_url = url_for('auth.reset_password', token=token, _external=True)
-    msg.body = f"To reset your password, click the following link: {reset_url}"
-    
-    try:
-        mail.send(msg)
-        print("Password reset email sent successfully.")
-    except Exception as e:
-        print(f"Failed to send password reset email: {e}")
-    
-    return msg
+    if send_password_reset_email(email, reset_url):
+        return True
+    else:
+        print("Failed to send password reset email.")
+        return False
     
     
 def hash_password(password):

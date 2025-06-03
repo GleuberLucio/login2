@@ -1,4 +1,4 @@
-from .models import User
+from .user_models import User
 from app_login import db
 from passlib.hash import pbkdf2_sha256 as hasher
 

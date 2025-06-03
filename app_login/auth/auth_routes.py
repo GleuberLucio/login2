@@ -1,9 +1,9 @@
 from app_login import login_manager
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app_login.controllers import get_user_by_email, verify_password
+from app_login.user.user_controllers import get_user_by_email, verify_password
 from flask_login import login_user
-from app_login.controllers import get_user_by_id, save_user
-from app_login.auth_controllers import verify_token, hash_password
+from app_login.user.user_controllers import get_user_by_id, save_user
+from app_login.auth.auth_controllers import verify_token, hash_password
 
 
 login_manager.login_view = 'auth.login'  # Set the login view for Flask-Login
@@ -17,7 +17,6 @@ def load_user(user_id):
     user = get_user_by_id(user_id)  
     return user
 
-@auth_bp.route('/', methods=['GET', 'POST'])
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

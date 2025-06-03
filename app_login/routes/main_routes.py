@@ -1,18 +1,18 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from .controllers import get_all_users, get_user_by_email, get_user_by_id, create_user, save_user, update_user, delete_user, hash_password
+from ..user.user_controllers import get_all_users, get_user_by_email, get_user_by_id, create_user, save_user, update_user, delete_user, hash_password
 from flask_login import login_required
-from .auth_controllers import generate_token, send_password_reset_email
+from ..auth.auth_controllers import generate_token, send_password_reset_link
 
 bp = Blueprint('main', __name__)
 
+@bp.route('/')
 @bp.route('/home', methods=['GET'])
-@login_required
-def index():
+def home():
     users = get_all_users()
     if not users:
         flash('No users found!', 'info')
-        return render_template('index.html', users=[])
-    return render_template('index.html', users=users)
+        return render_template('home.html', users=[])
+    return render_template('home.html', users=users)
 
 @bp.route('/register', methods=['GET', 'POST'])
 @login_required
@@ -33,8 +33,16 @@ def register():
         new_user = create_user(name=name, email=email, password=password)
         save_user(new_user) 
         flash('User registered successfully!', 'success')
-        return redirect(url_for('main.index'))
-    return render_template('register.html')
+        return redirect(url_for('main.home'))
+    else:
+        email = request.args.get('email')
+        print(f'Email from query: {email}')
+        if email:
+            existing_user = get_user_by_email(email)
+            if existing_user:
+                flash('Email already registered!', 'error')
+                return redirect(url_for('main.register'))
+    return render_template('register.html', email=email)
 
 @bp.route('/delete/<int:user_id>', methods=['GET'])
 @login_required
@@ -45,7 +53,7 @@ def delete(user_id):
     
     delete_user(user)
     flash('User deleted successfully!', 'success')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.home'))
 
 @bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -62,7 +70,7 @@ def update(user_id):
         
         if not user:
             flash('User not found!', 'error')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.home'))
         
         user.name = name
         user.email = email
@@ -70,7 +78,7 @@ def update(user_id):
         
         update_user(user)
         flash('User updated successfully!', 'success')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
     
     return render_template('update.html', user=user)
 
@@ -86,18 +94,13 @@ def forgot():
             return redirect(url_for('main.forgot'))
         
         token = generate_token(user.email)
-        message = send_password_reset_email(user.email, token)
-        flash('Password reset link sent to your email!', 'success')        
+        send_password_reset_link(user.email, token)
         
-        # Here you would typically send a password reset email
         flash('Password reset link sent to your email!', 'success')
         return redirect(url_for('auth.login'))
     
     return render_template('forgot.html')
 
-@bp.route('/reset', methods=['GET'])
-def reset():
-    return render_template('reset_pass.html')
 
 @bp.route('/teste-email')
 def teste_email():
@@ -111,4 +114,4 @@ def teste_email():
         flash('Test email sent successfully!', 'success')
     except Exception as e:
         flash(f'Failed to send test email: {e}', 'error')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.home'))

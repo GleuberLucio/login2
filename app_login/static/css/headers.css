@@ -13,3 +13,46 @@
 .dropdown-toggle:not(:focus) {
   outline: 0;
 }
+
+.header {
+    background: linear-gradient(90deg, #6ec1e4 0%, #2575fc 100%);
+    color: #fff;
+}
+.header .logo, .header .nav-link, .header .btn {
+    color: #fff !important;
+}
+.header .btn.btn-primary {
+    background-color: #fff;
+    color: #2575fc !important;
+    border: none;
+}
+.header .btn.btn-outline-primary {
+    border-color: #fff;
+    color: #fff !important;
+}
+.header .btn.btn-outline-primary:hover {
+    background: #fff;
+    color: #2575fc !important;
+}
+
+.hero {
+    background: linear-gradient(90deg, #e0ecfa 0%, #f8fbff 100%);
+}
+
+.features .card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(110,193,228,0.08);
+}
+
+.benefits {
+    background: linear-gradient(90deg, #f8fbff 0%, #e0ecfa 100%);
+}
+
+.signup {
+    background: #f4faff;
+}
+
+.footer {
+    background: #2575fc;
+    color: #fff;
+}

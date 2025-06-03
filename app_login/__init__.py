@@ -2,11 +2,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config.config import Config
 from flask_login import LoginManager
-from flask_mail import Mail
+from .utils.email import mail
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-mail = Mail()
 
 def init_app():
     app = Flask(__name__)
@@ -17,11 +16,11 @@ def init_app():
     mail.init_app(app)
     
     with app.app_context():
-        from . import models
+        from .user import user_models
         db.create_all()
     
-    from .routes import bp
-    from .auth_routes import auth_bp
+    from .routes.main_routes import bp
+    from .auth.auth_routes import auth_bp
     app.register_blueprint(bp)
     app.register_blueprint(auth_bp)
     
