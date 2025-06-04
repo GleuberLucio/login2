@@ -3,9 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from config.config import Config
 from flask_login import LoginManager
 from .utils.email import mail
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+migrate = Migrate()
 
 def init_app():
     app = Flask(__name__)
@@ -13,6 +15,7 @@ def init_app():
     
     db.init_app(app)
     login_manager.init_app(app)
+    migrate.init_app(app, db)
     mail.init_app(app)
     
     with app.app_context():

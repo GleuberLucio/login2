@@ -9,12 +9,18 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    
-    def __init__(self, name, email, password):
+    is_admin = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
+    is_verified = db.Column(db.Boolean, default=False)
+        
+    def __init__(self, name, email, password, is_admin=False, is_active=True, is_verified=False):
         """Initialize a new user."""
         self.name = name
         self.email = email
         self.password_hash = hasher.hash(password)
+        self.is_admin = is_admin
+        self.is_active = is_active
+        self.is_verified = is_verified
         
         return self
 

@@ -39,7 +39,7 @@ def logout():
     from flask_login import logout_user
     logout_user()
     flash('Logged out successfully!', 'success')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('main.home'))
 
 @auth_bp.route('/reset-pass/<token>', methods=['GET', 'POST'])
 def reset_password(token):

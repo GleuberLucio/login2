@@ -14,8 +14,15 @@ def home():
         return render_template('home.html', users=[])
     return render_template('home.html', users=users)
 
+@bp.route('/index', methods=['GET'])
+def index():
+    users = get_all_users()
+    if not users:
+        flash('No users found!', 'info')
+        return render_template('index.html', users=[])
+    return render_template('index.html', users=users)
+
 @bp.route('/register', methods=['GET', 'POST'])
-@login_required
 def register():
     if request.method == 'POST':
         name = request.form['name']
@@ -36,7 +43,6 @@ def register():
         return redirect(url_for('main.home'))
     else:
         email = request.args.get('email')
-        print(f'Email from query: {email}')
         if email:
             existing_user = get_user_by_email(email)
             if existing_user:
@@ -100,18 +106,3 @@ def forgot():
         return redirect(url_for('auth.login'))
     
     return render_template('forgot.html')
-
-
-@bp.route('/teste-email')
-def teste_email():
-    """Test route to send a test email."""
-    from flask_mail import Message
-    from app_login import mail
-    msg = Message(subject="Test Email", recipients=["exemplo@teste.com"])
-    msg.body = "This is a test email from Flask application."
-    try:
-        mail.send(msg)
-        flash('Test email sent successfully!', 'success')
-    except Exception as e:
-        flash(f'Failed to send test email: {e}', 'error')
-    return redirect(url_for('main.home'))

@@ -55,6 +55,18 @@ coverage.xml
 .mypy_cache/
 .dmypy.json
 
+# PyCharm
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Python virtual environments
+venv/
+env/
+ENV/
+
 # Flask instance folder
 instance/
 
@@ -62,11 +74,10 @@ instance/
 *.db
 *.sqlite3
 
-# MacOS
-.DS_Store
-
-# Windows
-Thumbs.db
+# Compiled files
+__pycache__/
+*.py[cod]
+*$py.class
 
 # Logs
 *.log
@@ -78,3 +89,12 @@ Thumbs.db
 # Ignore compiled static assets
 static/js/
 static/css/*.map
+
+# Ignore font-awesome fonts
+static/font-awesome-4.7.0/fonts/
+
+# Ignore Alembic migration cache
+migrations/__pycache__/
+
+# Ignore workspace settings
+*.code-workspace

